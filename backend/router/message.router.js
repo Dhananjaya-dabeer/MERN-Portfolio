@@ -1,5 +1,5 @@
 import express from 'express'
-import { allMessages, deleteMessage, sendMessage } from '../controllers/messageControllers.js'
+import { allMessages, deleteMessage, sendMessage } from '../controllers/message.controllers.js'
 
 const router = express.Router()
 
