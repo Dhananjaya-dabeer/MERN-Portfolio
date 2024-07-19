@@ -3,7 +3,8 @@ import ErrorHandler from '../middlewares/error.js'
 import {User} from "../modals/userShema.modals.js"
 import {v2 as cloudinary} from "cloudinary"
 import { genrateToken } from '../utils/jwtToken.js'
-
+import { sendEmail } from '../utils/sendEmail.js'
+import crypto from 'crypto'
 export const register = catchAsyncErrors(async(req, res, next) => {
   try {
       if(!req.files || Object.keys(req.files).length === 0){
@@ -85,7 +86,7 @@ export const register = catchAsyncErrors(async(req, res, next) => {
 
         const isPasswordMatched = user.comparePassword(password)
         if(!isPasswordMatched){
-            return next(new ErrorHandler("Invalid email or password"))
+            return next(new ErrorHandler("Invalid email or password", 400))
         }
 
         genrateToken(user, "loggedin successfully!", 200, res)
@@ -165,4 +166,99 @@ export const updateProfile = catchAsyncErrors(async(req, res, next) => {
         messsage: "Profile Updated!",
         user
     })
+})
+
+
+export const updatePassword = catchAsyncErrors(async(req, res, next) => {
+    const {currentPassword, newPassword, confirmNewPassword}  = req.body
+    if(!currentPassword || !newPassword || !confirmNewPassword){
+    return next(new ErrorHandler("All fields are required!", 400))
+    }
+    if(newPassword.length < 8 || confirmNewPassword.length < 8){
+        return next(new ErrorHandler("Password must contain atleast 8 charecters!", 401))
+    }
+    if(newPassword !== confirmNewPassword){
+        return next(new ErrorHandler("New password and confirm new Password doesn't match", 400))
+    }
+    if(currentPassword === newPassword){
+        return next(new ErrorHandler("New Password should be different from old one", 400))
+    }
+    const user = await User.findById(req.user.id).select("+password")
+    if(!user){
+        return next(new ErrorHandler("User not found", 400))
+    }
+    const isPasswordMatched = await user.comparePassword(currentPassword)
+    if(!isPasswordMatched){
+        return next(new ErrorHandler("Incorrect current password",400))
+    }
+
+    user.password = newPassword
+    user.save()
+    res.status(200).json({
+        success:true,
+        message: "Password updated"
+    })
+})
+
+export const getUserforPortfolio = catchAsyncErrors(async(req, res, next) => {
+    const id = "669967f7f044fcef3223a172"
+    const user = await User.findById(id)
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
+
+export const forgotPassword = catchAsyncErrors(async(req, res, next) => {
+    const user = await User.findOne({email:req.body.email})
+    if (!user){
+        next(new ErrorHandler("User not found!", 400))
+    }
+    const resetToken =  user.getResetPasswordToken()
+    await user.save({validateBeforeSave: false})
+    const resetPasswordUrl = `${process.env.DASHBOARD_URL}/password/reset/${resetToken}`
+    const message = `Your reset password token is :- \n\n ${resetPasswordUrl} \n\n If you have not requested for it, please ignore it`
+
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: "Personal portfolio dashboard password recovery",
+            message
+        });
+
+        res.status(200).json({
+            success:true,
+            message: `Email sent to ${user.email} successfully!`
+        })
+    } catch (error) {
+        user.resetPaswordExpire = undefined
+        user.resetPaswordExpire = undefined
+        await user.save()
+        return next(new ErrorHandler(err.message, 500))
+    }
+})
+
+
+export const resetPassword = catchAsyncErrors(async(req, res, next) => {
+    const {token} = req.params
+    if(req.body.password !== req.body.confirmPassword){
+        return next(new ErrorHandler("Password and confirm password does not match"))
+    }
+    if(req.body.password.length < 8 || req.body.confirmPassword.length < 8){
+        return next(new ErrorHandler("Password must contain atleast 8 charecters!", 400))
+    }
+    const resetPasswordToken = crypto.createHash('sha256').update(token).digest("hex")
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire:{$gt : Date.now()}
+    })
+
+    if(!user){
+        return next(new ErrorHandler("reset password token is invaild or has been expired", 400))
+    }
+   user.password = req.body.password
+   user.resetPasswordToken = undefined
+   user.resetPasswordExpire = undefined
+   await user.save();
+   genrateToken(user, "Password reset successfully!", 200, res)
 })
