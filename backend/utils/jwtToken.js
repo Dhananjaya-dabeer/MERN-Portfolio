@@ -7,6 +7,6 @@ export const genrateToken = (user, message, statusCode, res) => {
     }).json({
         success: true,
         message,
-        rest
+        data:rest
     })
 } 
