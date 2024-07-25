@@ -36,27 +36,7 @@ const userSlice = createSlice({
   },
 });
 
-export const login = (email, password) => async (dispatch) => {
-  dispatch(userSlice.actions.loginRequest());
-  try {
-    const { data } = await axios.post(
-      `http://localhost:4000/api/v1/user/login`,
-      { email, password },
-      { withCredentials: true, headers: { "Content-Type": "application/json" } }
-    );
-
-    dispatch(userSlice.actions.loginSuccess(data));
-  } catch (error) {
-    dispatch(
-      userSlice.actions.loginFailed(
-        error.response?.data?.message || error.message
-      )
-    );
-  }
-};
-
-export const clearAllUserErrors = () => (dispatch) => {
-  dispatch(userSlice.actions.clearAllErrors());
-};
+export const { loginFailed, loginRequest, loginSuccess, clearAllErrors } =
+  userSlice.actions;
 
 export default userSlice.reducer;

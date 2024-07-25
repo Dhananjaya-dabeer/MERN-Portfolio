@@ -11,6 +11,7 @@ import ViewProject from "./pages/ViewProject";
 import UpdateProject from "./pages/UpdateProject";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PrivateRoute from "./components/ui/PrivateRoute";
 function App() {
   return (
     <BrowserRouter>
@@ -19,11 +20,13 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/password/forgot" element={<ForgotPassword />} />
         <Route path="/password/reset/:token" element={<ResetPassword />} />
-        <Route path="/manage/skills" element={<ManageSkills />} />
-        <Route path="/manage/timeline" element={<ManageTimeline />} />
-        <Route path="/manage/projects" element={<ManageProjects />} />
         <Route path="/view/project/:id" element={<ViewProject />} />
-        <Route path="/update/project/:id" element={<UpdateProject />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/manage/skills" element={<ManageSkills />} />
+          <Route path="/manage/timeline" element={<ManageTimeline />} />
+          <Route path="/manage/projects" element={<ManageProjects />} />
+          <Route path="/update/project/:id" element={<UpdateProject />} />
+        </Route>
       </Routes>
       <ToastContainer position="bottom-right" theme="dark" />
     </BrowserRouter>

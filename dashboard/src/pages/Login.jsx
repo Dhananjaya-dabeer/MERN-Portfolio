@@ -1,11 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { clearAllUserErrors, login } from "@/store/slices/userSlices";
+import {
+  loginFailed,
+  loginRequest,
+  loginSuccess,
+} from "@/store/slices/userSlices";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
+import LoadingButton from "@/components/LoadingButton";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -17,19 +23,35 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    dispatch(login(email, password));
+  const handleLogin = async () => {
+    try {
+      dispatch(loginRequest());
+      const { data } = await axios.post(
+        `http://localhost:4000/api/v1/user/login`,
+        { email, password },
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (data.success === false) {
+        toast.error(data.message);
+        dispatch(loginFailed(data.message));
+      } else {
+        dispatch(loginSuccess(data));
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error(error.response.data.message || error.message);
+      dispatch(loginFailed("All fields are required!"));
+    }
   };
 
   useEffect(() => {
-    if (error) {
-      toast.error(error);
-      dispatch(clearAllUserErrors());
-    }
     if (isAuthenticated) {
       navigate("/");
     }
-  }, [dispatch, loading, isAuthenticated, error]);
+  }, []);
 
   return (
     <div className="w-full lg:grid lg:min-h-full lg:grid-cols-2 xl:min-h-screen">
@@ -70,9 +92,13 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <Button type="submit" className="w-full" onClick={handleLogin}>
-              Login
-            </Button>
+            {loading ? (
+              <LoadingButton cotent={"Loging in"} />
+            ) : (
+              <Button type="submit" className="w-full" onClick={handleLogin}>
+                Login
+              </Button>
+            )}
           </div>
         </div>
       </div>

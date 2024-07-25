@@ -228,9 +228,10 @@ export const getUserforPortfolio = catchAsyncErrors(async (req, res, next) => {
 })
 
 export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
+  if (!req.body.email) return next(new ErrorHandler('Email required!', 400))
   const user = await User.findOne({ email: req.body.email })
   if (!user) {
-    next(new ErrorHandler('User not found!', 400))
+    next(new ErrorHandler('User not found!', 404))
   }
   const resetToken = user.getResetPasswordToken()
   await user.save({ validateBeforeSave: false })
