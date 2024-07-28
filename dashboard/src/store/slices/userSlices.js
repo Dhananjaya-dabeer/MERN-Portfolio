@@ -33,10 +33,21 @@ const userSlice = createSlice({
     clearAllErrors(state) {
       state.error = null;
     },
+    logout(state) {
+      (state.loading = false),
+        (state.isAuthenticated = false),
+        (state.user = {}),
+        (state.error = null);
+    },
   },
 });
 
-export const { loginFailed, loginRequest, loginSuccess, clearAllErrors } =
-  userSlice.actions;
+export const {
+  loginFailed,
+  loginRequest,
+  loginSuccess,
+  clearAllErrors,
+  logout,
+} = userSlice.actions;
 
 export default userSlice.reducer;

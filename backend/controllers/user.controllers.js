@@ -259,6 +259,9 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
 export const resetPassword = catchAsyncErrors(async (req, res, next) => {
   const { token } = req.params
+  if (!token) {
+    return next(new ErrorHandler('token not found!', 404))
+  }
   if (req.body.password !== req.body.confirmPassword) {
     return next(
       new ErrorHandler('Password and confirm password does not match')
