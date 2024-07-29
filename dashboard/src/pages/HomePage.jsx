@@ -32,9 +32,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
+import Dashboard from "./subpages/Dashboard";
+import AddProject from "./subpages/AddProject";
+import AddSkills from "./subpages/AddSkills";
+import AddApplication from "./subpages/AddApplication";
+import AddTimeline from "./subpages/AddTimeline";
+import Messages from "./subpages/Messages";
+import Account from "./subpages/Account";
 
 function HomePage() {
-  const [active, setActive] = useState();
+  const [active, setActive] = useState("Dashboard");
   const [isLoading, setIsLoading] = useState(false);
   const { isAuthenticated, error, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -70,12 +77,49 @@ function HomePage() {
       navigate("/login");
     }
   }, [isAuthenticated]);
+
+  const renderContent = () => {
+    switch (active) {
+      case "Dashboard":
+        return <Dashboard />;
+        break;
+
+      case "Add Project":
+        return <AddProject />;
+        break;
+
+      case "Add Skills":
+        return <AddSkills />;
+        break;
+
+      case "Add Application":
+        return <AddApplication />;
+        break;
+
+      case "Add TimeLine":
+        return <AddTimeline />;
+        break;
+
+      case "Messages":
+        return <Messages />;
+        break;
+
+      case "Account":
+        return <Account />;
+        break;
+
+      default:
+        return <Dashboard />;
+        break;
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-muted/40 w-full">
       <aside className="fixed inset-y-0 left0 hidden w-14 flex-col border-r bg-background sm:flex z-50">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
           <Link className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full">
-            <Package className="h-4 w-4 transition-all group-hover:scale-110" />
+            <Package className="h-5 w-5 transition-all group-hover:scale-110" />
             <span className="sr-only">Dashboard</span>
           </Link>
           <TooltipProvider>
@@ -226,7 +270,7 @@ function HomePage() {
           </TooltipProvider>
         </nav>
       </aside>
-      <header className="sticky top-0 left0 hidden w-14  flex-col border-r bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 max-[900px]:h-[100px]">
+      <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 max-[900px]:h-[100px]">
         <Sheet>
           <SheetTrigger asChild>
             <Button size="icon" variant="outline" className="sm:hidden">
@@ -236,9 +280,16 @@ function HomePage() {
           </SheetTrigger>
           <SheetContent side="left" className="sm:max-w-xs">
             <nav className="grid gap-6 text-lg font-medium">
-              <Link className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base">
+              {/* <Link className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base">
                 <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-                <span>Dashboard</span>
+                
+              </Link> */}
+              <Link>
+                <img
+                  src={user && user.data.avatar && user.data.avatar.url}
+                  alt="avatar"
+                  className=" w-14 h-14 rounded-full"
+                />
               </Link>
               <Link
                 href="#"
@@ -336,8 +387,18 @@ function HomePage() {
             </nav>
           </SheetContent>
         </Sheet>
-        <div className="flex"></div>
+        <div className="flex items-center gap-4 md:grow-0 sm:ml-16 sm:mt-5">
+          <img
+            src={user && user.data.avatar && user.data.avatar.url}
+            alt="avatar"
+            className=" w-20 h-20 rounded-full max-[900px]:hidden"
+          />
+          <h1 className="text-4xl max-[900px]:text-2xl">
+            Welcome back, {user.data.fullName}
+          </h1>
+        </div>
       </header>
+      {renderContent()}
     </div>
   );
 }
