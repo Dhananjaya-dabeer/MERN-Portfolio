@@ -174,7 +174,7 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     messsage: 'Profile Updated!',
-    user,
+    data: user,
   })
 })
 
@@ -185,7 +185,7 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
   }
   if (newPassword.length < 8 || confirmNewPassword.length < 8) {
     return next(
-      new ErrorHandler('Password must contain atleast 8 charecters!', 401)
+      new ErrorHandler('Password must contain atleast 8 charecters!', 400)
     )
   }
   if (newPassword !== confirmNewPassword) {

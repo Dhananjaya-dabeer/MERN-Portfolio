@@ -17,12 +17,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/password/forgot" element={<ForgotPassword />} />
         <Route path="/password/reset/:token" element={<ResetPassword />} />
         <Route path="/view/project/:id" element={<ViewProject />} />
         <Route element={<PrivateRoute />}>
+          <Route path="/" element={<HomePage />} />
           <Route path="/manage/skills" element={<ManageSkills />} />
           <Route path="/manage/timeline" element={<ManageTimeline />} />
           <Route path="/manage/projects" element={<ManageProjects />} />

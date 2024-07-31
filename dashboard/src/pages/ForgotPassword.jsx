@@ -75,7 +75,7 @@ function ForgotPassword() {
               </div>
             </div>
             {loading ? (
-              <LoadingButton cotent={"Requesting..."} />
+              <LoadingButton content={"Requesting..."} />
             ) : (
               <Button
                 type="submit"

@@ -1,16 +1,22 @@
+import LoadingButton from "@/components/LoadingButton";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
+import { logout, UpdateUser } from "@/store/slices/userSlices";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function UpdateProfile() {
-  const { user, loading, error, isUpdated, message } = useSelector(
-    (state) => state.user
-  );
+  const { user, isAuthenticated } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
-  const [fullName, setFullName] = useState(user && user?.data.fullName);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [fullName, setFullName] = useState(user && user?.data?.fullName);
   const [email, setEmail] = useState(user && user?.data?.email);
   const [phone, setPhone] = useState(user && user?.data?.phone);
   const [aboutMe, setAboutMe] = useState(user && user?.data?.fullName);
@@ -69,6 +75,52 @@ function UpdateProfile() {
     }
   };
 
+  const hadnleUpdateProfile = async () => {
+    const formData = new FormData();
+    formData.append("fullName", fullName);
+    formData.append("email", email);
+    formData.append("phone", phone);
+    formData.append("portfolioUrl", portfolioUrl);
+    formData.append("aboutMe", aboutMe);
+    formData.append("linkedinUrl", linkedinUrl);
+    formData.append("githubUrl", githubUrl);
+    formData.append("instagramUrl", instagramUrl);
+    formData.append("twitterUrl", twitterUrl);
+    formData.append("facebook", facebook);
+    formData.append("avatar", avatar);
+    formData.append("resume", resume);
+    try {
+      setLoading(true);
+      const response = await axios.put(
+        `http://localhost:4000/api/v1/user/update/me`,
+        formData,
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = response.data;
+      if (data.success == false) {
+        setLoading(false);
+        toast.error(data.message);
+        return;
+      }
+      console.log(data);
+      setLoading(false);
+      dispatch(UpdateUser(data));
+      toast.success("Portfolio Updated Successfully!");
+    } catch (error) {
+      setLoading(false);
+      console.log(error.response.data.status);
+      if (error.response.status == 403 || error.response.status == 401) {
+        navigate("/login");
+        dispatch(logout());
+      }
+      toast.error(error.response.data.message || error.message);
+    }
+  };
+
+  console.log(user);
   return (
     <>
       <div className="w-full h-full">
@@ -114,43 +166,105 @@ function UpdateProfile() {
             </div>
             <div className="grid gap-2">
               <Label>Full Name</Label>
-              <Input type="text" defaultValue={user.data.fullName} disabled />
+              <Input
+                type="text"
+                defaultValue={user?.data?.fullName}
+                placeholder="Your Full Name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
             </div>
             <div className="grid gap-2">
               <Label>Email</Label>
-              <Input type="email" defaultValue={user.data.email} disabled />
+              <Input
+                type="email"
+                defaultValue={user?.data?.email}
+                placeholder="Your Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div className="grid gap-2">
               <Label>Phone</Label>
-              <Input type="text" defaultValue={user.data.phone} disabled />
+              <Input
+                type="text"
+                defaultValue={user?.data?.phone}
+                placeholder="Your Phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
             </div>
             <div className="grid gap-2">
               <Label>About Me</Label>
-              <Textarea defaultValue={user.data.aboutMe} disabled />
+              <Textarea
+                defaultValue={user?.data?.aboutMe}
+                placeholder="About Me"
+                value={aboutMe}
+                onChange={(e) => setAboutMe(e.target.value)}
+              />
             </div>
             <div className="grid gap-2">
               <Label>Portfolio URL</Label>
-              <Input defaultValue={user.data.portfolioURL} disabled />
+              <Input
+                defaultValue={user?.data?.portfolioURL}
+                placeholder="Your Portfolio URL"
+                value={portfolioUrl}
+                onChange={(e) => setPortfolioUrl(e.target.value)}
+              />
             </div>
             <div className="grid gap-2">
               <Label>Github URL</Label>
-              <Input defaultValue={user.data.githubURL} disabled />
+              <Input
+                defaultValue={user?.data?.githubURL}
+                placeholder="Your Github Profile URL"
+                value={githubUrl}
+                onChange={(e) => setGithubUrl(e.target.value)}
+              />
             </div>
             <div className="grid gap-2">
               <Label>LinkedIn URL</Label>
-              <Input defaultValue={user.data.linkedinURL} disabled />
+              <Input
+                defaultValue={user?.data?.linkedinURL}
+                placeholder="Your LinkedIn Profile URL"
+                value={linkedinUrl}
+                onChange={(e) => setLinkedInUrl(e.target.value)}
+              />
             </div>
             <div className="grid gap-2">
               <Label>Instagram URL</Label>
-              <Input defaultValue={user.data.instagramURL} disabled />
+              <Input
+                defaultValue={user?.data?.instagramURL}
+                placeholder="Your Instagram Profile URL"
+                value={instagramUrl}
+                onChange={(e) => setInstagramUrl(e.target.value)}
+              />
             </div>
             <div className="grid gap-2">
               <Label>Facebook URL</Label>
-              <Input defaultValue={user.data.facebookURL} disabled />
+              <Input
+                defaultValue={user?.data?.facebookURL}
+                placeholder="Your Facebook Profile URL"
+                value={facebook}
+                onChange={() => setFacebookUrl(e.target.value)}
+              />
             </div>
             <div className="grid gap-2">
               <Label>Twitter(X) URL</Label>
-              <Input defaultValue={user.data.twitterURL} disabled />
+              <Input
+                defaultValue={user?.data?.twitterURL}
+                onChange={() => setTwitterUrl(e.target.value)}
+                placeholder="Your Twitter Profile URL"
+                value={twitterUrl}
+              />
+            </div>
+            <div className="grid gap-2">
+              {!loading ? (
+                <Button className="w-full" onClick={hadnleUpdateProfile}>
+                  Update Profile
+                </Button>
+              ) : (
+                <LoadingButton content={"Updating.."} />
+              )}
             </div>
           </div>
         </div>

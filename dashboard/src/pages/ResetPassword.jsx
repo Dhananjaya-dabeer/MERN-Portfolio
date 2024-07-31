@@ -75,7 +75,7 @@ function ResetPassword() {
               />
             </div>
             {loading ? (
-              <LoadingButton cotent={"Resetting..."} />
+              <LoadingButton content={"Resetting..."} />
             ) : (
               <Button type="submit" className="w-full" onClick={handleReset}>
                 Reset

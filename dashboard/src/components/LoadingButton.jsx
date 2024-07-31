@@ -1,6 +1,6 @@
 import React from "react";
 
-function LoadingButton({ cotent, width }) {
+function LoadingButton({ content, width }) {
   return (
     <>
       <button disabled type="button" className={width ? `${width}` : `w-full`}>
@@ -21,7 +21,7 @@ function LoadingButton({ cotent, width }) {
             fill="#1C64F2"
           />
         </svg>
-        {cotent}
+        {content}
       </button>
     </>
   );

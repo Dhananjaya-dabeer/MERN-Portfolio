@@ -20,8 +20,8 @@
   width: 100%;
   padding: 7px;
   font-weight: 600;
-  /* border: 1px solid hsla(222.2, 47, 4%, 11.2%);
-  background: hsla(222.2, 47, 4%, 11.2%); */
+  border: 1px solid hsla(222.2, 47, 4%, 11.2%);
+  background-color: #141d33;
   cursor: pointer;
   color: #fff;
   border-radius: 8px;

@@ -66,54 +66,40 @@ function HomePage() {
       navigate("/login");
     } catch (error) {
       setIsLoading(false);
-      if (error.response.status == 403) {
+      if (error.response.status == 403 || error.response.status == 401) {
         navigate("/login");
       }
       toast.error(error.response.data.message || error.message);
     }
   };
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
-  }, [isAuthenticated]);
-
   const renderContent = () => {
     switch (active) {
       case "Dashboard":
         return <Dashboard />;
         break;
-
       case "Add Project":
         return <AddProject />;
         break;
-
       case "Add Skills":
         return <AddSkills />;
         break;
-
       case "Add Application":
         return <AddApplication />;
         break;
-
       case "Add TimeLine":
         return <AddTimeline />;
         break;
-
       case "Messages":
         return <Messages />;
         break;
-
       case "Account":
         return <Account />;
         break;
-
       default:
         return <Dashboard />;
         break;
     }
   };
-
   return (
     <div className="flex flex-col min-h-screen bg-muted/40 w-full">
       <aside className="fixed inset-y-0 left0 hidden w-14 flex-col border-r bg-background sm:flex z-50">
@@ -280,13 +266,9 @@ function HomePage() {
           </SheetTrigger>
           <SheetContent side="left" className="sm:max-w-xs">
             <nav className="grid gap-6 text-lg font-medium">
-              {/* <Link className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base">
-                <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-                
-              </Link> */}
               <Link>
                 <img
-                  src={user && user.data.avatar && user.data.avatar.url}
+                  src={user && user?.data?.avatar && user?.data?.avatar.url}
                   alt="avatar"
                   className=" w-14 h-14 rounded-full"
                 />
@@ -375,7 +357,6 @@ function HomePage() {
                 <User className="h-5 w-5" />
                 Account
               </Link>
-
               <Link
                 href="#"
                 className={`flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground`}
@@ -389,12 +370,12 @@ function HomePage() {
         </Sheet>
         <div className="flex items-center gap-4 md:grow-0 sm:ml-16 sm:mt-5">
           <img
-            src={user && user.data.avatar && user.data.avatar.url}
+            src={user && user?.data?.avatar && user?.data?.avatar.url}
             alt="avatar"
             className=" w-20 h-20 rounded-full max-[900px]:hidden"
           />
           <h1 className="text-4xl max-[900px]:text-2xl">
-            Welcome back, {user.data.fullName}
+            Welcome back, {user?.data?.fullName}
           </h1>
         </div>
       </header>

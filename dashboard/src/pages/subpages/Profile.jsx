@@ -20,60 +20,69 @@ function Profile() {
             <div className="flex items-start lg:justify-between lg:items-center flex-col lg:flex-row gap-5">
               <div className="grid gap-2 w-full sm:w-72">
                 <Label>Profile Image</Label>
-                <img
-                  src={user && user.data.avatar && user.data.avatar.url}
-                  alt="avatar"
-                  className="w-full h-auto sm:w-72 sm:h-72 rounded-2xl"
-                />
+                <Link
+                  to={user && user?.data?.avatar && user?.data?.avatar.url}
+                  target="_blank"
+                >
+                  <img
+                    src={user && user?.data?.avatar && user?.data?.avatar.url}
+                    alt="avatar"
+                    className="w-full h-auto sm:w-72 sm:h-72 rounded-2xl"
+                  />
+                </Link>
               </div>
               <div className="grid gap-2 w-full sm:w-72">
-                <Label>Resume</Label>
-                <img
-                  src={user && user.data.resume && user.data.resume.url}
-                  alt="resume"
-                  className="w-full h-auto sm:w-72 sm:h-72 rounded-2xl"
-                />
+                <Link
+                  to={user && user?.data?.resume && user?.data?.resume?.url}
+                  target="_blank"
+                >
+                  <img
+                    src={user && user?.data?.resume && user?.data?.resume?.url}
+                    alt="resume"
+                    className="w-full h-auto sm:w-72 sm:h-72 rounded-2xl"
+                  />
+                </Link>
               </div>
             </div>
             <div className="grid gap-2">
               <Label>Full Name</Label>
-              <Input type="text" defaultValue={user.data.fullName} disabled />
+              <Input type="text" defaultValue={user?.data?.fullName} disabled />
             </div>
             <div className="grid gap-2">
               <Label>Email</Label>
-              <Input type="email" defaultValue={user.data.email} disabled />
+              <Input type="email" defaultValue={user?.data?.email} disabled />
             </div>
             <div className="grid gap-2">
               <Label>Phone</Label>
-              <Input type="text" defaultValue={user.data.phone} disabled />
+              <Input type="text" defaultValue={user?.data?.phone} disabled />
             </div>
             <div className="grid gap-2">
               <Label>About Me</Label>
-              <Textarea defaultValue={user.data.aboutMe} disabled />
+              <Textarea defaultValue={user?.data?.aboutMe} disabled />
             </div>
             <div className="grid gap-2">
               <Label>Portfolio URL</Label>
-              <Input defaultValue={user.data.portfolioURL} disabled />
+              <Input defaultValue={user?.data?.portfolioURL} disabled />
             </div>
             <div className="grid gap-2">
               <Label>Github URL</Label>
-              <Input defaultValue={user.data.githubURL} disabled />
+              <Input defaultValue={user?.data?.githubURL} disabled />
             </div>
             <div className="grid gap-2">
               <Label>LinkedIn URL</Label>
-              <Input defaultValue={user.data.linkedinURL} disabled />
+              <Input defaultValue={user?.data?.linkedinURL} disabled />
             </div>
             <div className="grid gap-2">
               <Label>Instagram URL</Label>
-              <Input defaultValue={user.data.instagramURL} disabled />
+              <Input defaultValue={user?.data?.instagramURL} disabled />
             </div>
             <div className="grid gap-2">
               <Label>Facebook URL</Label>
-              <Input defaultValue={user.data.facebookURL} disabled />
+              <Input defaultValue={user?.data?.facebookURL} disabled />
             </div>
             <div className="grid gap-2">
               <Label>Twitter(X) URL</Label>
-              <Input defaultValue={user.data.twitterURL} disabled />
+              <Input defaultValue={user?.data?.twitterURL} disabled />
             </div>
           </div>
         </div>

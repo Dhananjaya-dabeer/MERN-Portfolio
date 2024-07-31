@@ -93,7 +93,7 @@ export default function Login() {
               />
             </div>
             {loading ? (
-              <LoadingButton cotent={"Loging in"} />
+              <LoadingButton content={"Loging in"} />
             ) : (
               <Button type="submit" className="w-full" onClick={handleLogin}>
                 Login
