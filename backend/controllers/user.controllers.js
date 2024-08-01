@@ -137,6 +137,7 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
     resetPasswordToken: req.body.resetPasswordToken,
     resetPaswordExpire: req.body.resetPaswordExpire,
   }
+
   if (req.files && req.files.avatar) {
     const avatar = req.files.avatar
     const user = await User.findById(req.user.id)
@@ -198,7 +199,10 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
   }
   if (currentPassword === newPassword) {
     return next(
-      new ErrorHandler('New Password should be different from old one', 400)
+      new ErrorHandler(
+        'New Password should be different from Current Password',
+        400
+      )
     )
   }
   const user = await User.findById(req.user.id).select('+password')
@@ -250,8 +254,8 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
       message: `Email sent to ${user.email} successfully!`,
     })
   } catch (error) {
-    user.resetPaswordExpire = undefined
-    user.resetPaswordExpire = undefined
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpire = undefined
     await user.save()
     return next(new ErrorHandler(err.message, 500))
   }

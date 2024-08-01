@@ -76,17 +76,27 @@ function UpdateProfile() {
   };
 
   const hadnleUpdateProfile = async () => {
+    const emailRegex = /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,6}$/;
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!emailRegex.test(email)) {
+      toast.warn("Please enter a valid email id!");
+      return;
+    }
+    if (!phoneRegex.test(phone)) {
+      toast.warn("Please enter Indian number!");
+      return;
+    }
     const formData = new FormData();
     formData.append("fullName", fullName);
     formData.append("email", email);
     formData.append("phone", phone);
-    formData.append("portfolioUrl", portfolioUrl);
+    formData.append("portfolioURL", portfolioUrl);
     formData.append("aboutMe", aboutMe);
-    formData.append("linkedinUrl", linkedinUrl);
-    formData.append("githubUrl", githubUrl);
-    formData.append("instagramUrl", instagramUrl);
-    formData.append("twitterUrl", twitterUrl);
-    formData.append("facebook", facebook);
+    formData.append("linkedinURL", linkedinUrl);
+    formData.append("githubURL", githubUrl);
+    formData.append("instagramURL", instagramUrl);
+    formData.append("twitterURL", twitterUrl);
+    formData.append("facebookURL", facebook);
     formData.append("avatar", avatar);
     formData.append("resume", resume);
     try {
@@ -96,7 +106,6 @@ function UpdateProfile() {
         formData,
         {
           withCredentials: true,
-          headers: { "Content-Type": "application/json" },
         }
       );
       const data = response.data;
@@ -105,7 +114,6 @@ function UpdateProfile() {
         toast.error(data.message);
         return;
       }
-      console.log(data);
       setLoading(false);
       dispatch(UpdateUser(data));
       toast.success("Portfolio Updated Successfully!");
@@ -120,7 +128,6 @@ function UpdateProfile() {
     }
   };
 
-  console.log(user);
   return (
     <>
       <div className="w-full h-full">
@@ -245,14 +252,14 @@ function UpdateProfile() {
                 defaultValue={user?.data?.facebookURL}
                 placeholder="Your Facebook Profile URL"
                 value={facebook}
-                onChange={() => setFacebookUrl(e.target.value)}
+                onChange={(e) => setFacebookUrl(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
               <Label>Twitter(X) URL</Label>
               <Input
                 defaultValue={user?.data?.twitterURL}
-                onChange={() => setTwitterUrl(e.target.value)}
+                onChange={(e) => setTwitterUrl(e.target.value)}
                 placeholder="Your Twitter Profile URL"
                 value={twitterUrl}
               />
