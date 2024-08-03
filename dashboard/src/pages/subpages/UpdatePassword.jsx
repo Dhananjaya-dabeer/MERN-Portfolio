@@ -29,7 +29,7 @@ function UpdatePassword() {
         confirmNewPassword,
       };
       const response = await axios.put(
-        "http://localhost:4000/api/v1/user/update/password",
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/user/update/password`,
         body,
         {
           withCredentials: true,

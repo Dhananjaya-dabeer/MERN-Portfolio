@@ -102,7 +102,7 @@ function UpdateProfile() {
     try {
       setLoading(true);
       const response = await axios.put(
-        `http://localhost:4000/api/v1/user/update/me`,
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/user/update/me`,
         formData,
         {
           withCredentials: true,

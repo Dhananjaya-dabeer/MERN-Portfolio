@@ -19,7 +19,9 @@ function ResetPassword() {
     try {
       setLoading(true);
       const { data } = await axios.put(
-        `http://localhost:4000/api/v1/user/password/reset/${token}`,
+        `${
+          import.meta.env.VITE_BACKEND_BASE_URL
+        }/api/v1/user/password/reset/${token}`,
         { password, confirmPassword },
         {
           withCredentials: true,

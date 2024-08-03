@@ -50,7 +50,7 @@ function HomePage() {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        `http://localhost:4000/api/v1/user/logout`,
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/user/logout`,
         {},
         { withCredentials: true }
       );
@@ -86,7 +86,7 @@ function HomePage() {
       case "Add Application":
         return <AddApplication />;
         break;
-      case "Add TimeLine":
+      case "Add Timeline":
         return <AddTimeline />;
         break;
       case "Messages":
@@ -100,6 +100,7 @@ function HomePage() {
         break;
     }
   };
+
   return (
     <div className="flex flex-col min-h-screen bg-muted/40 w-full">
       <aside className="fixed inset-y-0 left0 hidden w-14 flex-col border-r bg-background sm:flex z-50">

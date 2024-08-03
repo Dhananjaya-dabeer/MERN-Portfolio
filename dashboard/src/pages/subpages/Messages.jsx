@@ -29,7 +29,7 @@ function Messages() {
     navigate("/");
   };
 
-  const { messages } = useSelector((state) => state.messages);
+  const { messages, loading } = useSelector((state) => state.messages);
   const [messageId, setMessageId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
@@ -37,14 +37,13 @@ function Messages() {
       try {
         dispatch(getAllMessagesRequest());
         const response = await axios.get(
-          "http://localhost:4000/api/v1/message/getall",
+          `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/message/getall`,
           {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
           }
         );
         const data = response.data;
-        console.log(data);
         if (data.success == false) {
           toast.error(data.message);
           dispatch(getAllMessagesFail());
@@ -67,7 +66,7 @@ function Messages() {
     try {
       setIsLoading(true);
       const response = await axios.delete(
-        `http://localhost:4000/api/v1/message/delete/${id}`,
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/message/delete/${id}`,
         { withCredentials: true }
       );
       const data = response.data;
@@ -81,24 +80,21 @@ function Messages() {
       setIsLoading(false);
       toast.success(data.message || "Message deleted successfully");
     } catch (error) {
+      setIsLoading(false);
       toast.error(error.response.data.message || error.message);
       if (error.response.status == 403 || error.response.status == 401) {
         dispatch(logout()), navigate("/login");
       }
-      setIsLoading(false);
     }
   };
 
-  return (
+  return !loading ? (
     <div className="min-h-screen sm:gap-4 sm:py-4 sm:pl-20">
       <Tabs>
         <TabsContent>
           <Card>
             <CardHeader className="flex gap-4 sm:justify-between sm:flex-row sm:items-center">
               <CardTitle>Messages</CardTitle>
-              <Button onClick={handleReturnToDashboard} className="w-fit">
-                Return to Dashboard
-              </Button>
             </CardHeader>
             <CardContent className="grid sm:grid-cols-2 gap-4">
               {messages && messages.length > 0 ? (
@@ -139,6 +135,14 @@ function Messages() {
           </Card>
         </TabsContent>
       </Tabs>
+    </div>
+  ) : (
+    <div className="h-[80vh] flex justify-center items-center">
+      <img
+        src={import.meta.env.VITE_LOADER}
+        alt="Loading..."
+        className="w-20 h-20"
+      />
     </div>
   );
 }

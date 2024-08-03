@@ -3,6 +3,14 @@ import ErrorHandler from '../middlewares/error.js'
 import { SoftwareApplication } from '../modals/softwareApplicationSchema.model.js'
 import { v2 as cloudinary } from 'cloudinary'
 export const addNewApplication = catchAsyncErrors(async (req, res, next) => {
+  const { name } = req.body
+
+  if (!name && (!req.files || Object.keys(req.files).length === 0)) {
+    return next(new ErrorHandler("Software's name and icon are required", 400))
+  }
+  if (!name) {
+    return next(new ErrorHandler("Software's name is required", 400))
+  }
   if (!req.files || Object.keys(req.files).length === 0) {
     return next(
       new ErrorHandler('Software application icon/svg required!', 400)
@@ -10,11 +18,7 @@ export const addNewApplication = catchAsyncErrors(async (req, res, next) => {
   }
 
   const { svg } = req.files
-  const { name } = req.body
 
-  if (!name) {
-    return next(new ErrorHandler("Software's name is required", 400))
-  }
   const cloudinaryResponse = await cloudinary.uploader.upload(
     svg.tempFilePath,
     { folder: 'PORTFOLIO_SOFTWARE_APPLICATIONS' }

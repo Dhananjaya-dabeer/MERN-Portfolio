@@ -3,12 +3,6 @@ import ErrorHandler from '../middlewares/error.js'
 import { Project } from '../modals/projectSchema.model.js'
 import { v2 as cloudinary } from 'cloudinary'
 export const addNewProject = catchAsyncErrors(async (req, res, next) => {
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return next(new ErrorHandler('Project banner image required', 400))
-  }
-
-  const { projectBanner } = req.files
-
   const {
     title,
     description,
@@ -30,6 +24,11 @@ export const addNewProject = catchAsyncErrors(async (req, res, next) => {
   ) {
     return next(new ErrorHandler('Please provide all Details', 400))
   }
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return next(new ErrorHandler('Project banner image required', 400))
+  }
+
+  const { projectBanner } = req.files
 
   const cloudinaryResponse = await cloudinary.uploader.upload(
     projectBanner.tempFilePath,

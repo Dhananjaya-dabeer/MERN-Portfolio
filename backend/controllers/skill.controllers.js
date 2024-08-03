@@ -4,16 +4,15 @@ import { Skill } from '../modals/skillSchema.model.js'
 import { v2 as cloudinary } from 'cloudinary'
 
 export const addNewSkill = catchAsyncErrors(async (req, res, next) => {
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return next(new ErrorHandler('Skill icon/svg required!', 400))
-  }
-
-  const { svg } = req.files
   const { title, proficiency } = req.body
 
   if (!title || !proficiency) {
     return next(new ErrorHandler('Please fill full form!', 400))
   }
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return next(new ErrorHandler('Skill icon/svg required!', 400))
+  }
+  const { svg } = req.files
   const cloudinaryResponse = await cloudinary.uploader.upload(
     svg.tempFilePath,
     { folder: 'PORTFOLIO_SKILLS_SVGS' }
