@@ -52,6 +52,7 @@ function AddApplication() {
       toast.success(data.message);
       setName("");
       setSvg("");
+      setSvgPreview("");
     } catch (error) {
       if (error.response.status == 401 || error.response.status == 403) {
         dispatch(logout());

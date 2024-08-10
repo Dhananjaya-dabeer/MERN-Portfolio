@@ -33,6 +33,11 @@ function Dashboard() {
   const [isSkillsLoading, setIsSkillsLoading] = useState(false);
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState();
+  const [application, setApplication] = useState();
+  const [deleteAppLoading, setDeleteAppLoading] = useState(false);
+  const [applicationCount, setApplicationCount] = useState(1);
+  const [applicationId, setApplicationId] = useState("");
+  const [timelines, setTimelines] = useState();
   useEffect(() => {
     const fetchDataForProjects = async () => {
       try {
@@ -56,7 +61,6 @@ function Dashboard() {
         toast.error(error.response.data.message || error.message);
         if (error.response.status == 401 || error.response.status == 403) {
           dispatch(logout());
-          navigate("/login");
         }
       }
     };
@@ -84,13 +88,94 @@ function Dashboard() {
         toast.error(error.response.data.message || error.message);
         if (error.response.status == 401 || error.response.status == 403) {
           dispatch(logout());
-          navigate("/login");
         }
       }
     };
+
+    const fetchDataForTimeline = async () => {
+      try {
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/timeline/getall`,
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+
+        if (data.success == false) {
+          toast.error(data.message || "Internal Error");
+          return;
+        }
+        setTimelines(data?.timelines);
+      } catch (error) {
+        toast.error(error.response.data.message || error.message);
+        if (error.response.status == 401 || error.response.status == 403) {
+          dispatch(logout());
+        }
+      }
+    };
+
     fetchDataForProjects();
     fetchDataForSkills();
+    fetchDataForTimeline();
   }, []);
+
+  useEffect(() => {
+    const fetchDataForApplication = async () => {
+      try {
+        const { data } = await axios.get(
+          `${
+            import.meta.env.VITE_BACKEND_BASE_URL
+          }/api/v1/softwareapplication/getall`,
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+
+        if (data.success == false) {
+          toast.error(data.message);
+          return;
+        }
+        setApplication(data.data);
+      } catch (error) {
+        toast.error(error.response.data.message || error.message);
+        if (error.response.status == 401 || error.response.status == 403) {
+          dispatch(logout());
+        }
+      }
+    };
+    fetchDataForApplication();
+  }, [applicationCount]);
+  const deleteApplicationHandler = async (id) => {
+    try {
+      setApplicationId(id);
+      setDeleteAppLoading(true);
+      const { data } = await axios.delete(
+        `${
+          import.meta.env.VITE_BACKEND_BASE_URL
+        }/api/v1/softwareapplication/delete/${id}`,
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (data.success == false) {
+        setDeleteAppLoading(false);
+        toast.error(data.message || "Internal error");
+        return;
+      }
+      setDeleteAppLoading(false);
+      toast.success(data.message || "deleted Successfully!");
+      setApplicationCount(applicationCount + 1);
+    } catch (error) {
+      setDeleteAppLoading(false);
+      toast.error(error.response.data.message || error.message);
+      if (error.response.status == 401 || error.response.status == 403) {
+        dispatch(logout());
+      }
+    }
+  };
 
   return (
     <>
@@ -114,15 +199,14 @@ function Dashboard() {
                 <CardHeader className="pb-2">
                   <CardTitle>Projects Completed</CardTitle>
                   {!isProjectLoading ? (
-                    projects?.length && (
-                      <CardTitle className="text-5xl">
-                        {projects?.length}
-                      </CardTitle>
-                    )
-                  ) : (
-                    <LoadingButton width={"w-1/4"} heightAndWidth={"h-7 w-7"}>
+                    <CardTitle className="text-5xl">
                       {projects?.length}
-                    </LoadingButton>
+                    </CardTitle>
+                  ) : (
+                    <LoadingButton
+                      width={"w-1/4"}
+                      heightAndWidth={"h-7 w-7"}
+                    ></LoadingButton>
                   )}
                 </CardHeader>
                 <CardFooter>
@@ -135,11 +219,7 @@ function Dashboard() {
                 <CardHeader className="pb-2">
                   <CardTitle>Skills</CardTitle>
                   {!isSkillsLoading ? (
-                    skills?.length && (
-                      <CardTitle className="text-5xl">
-                        {skills?.length}
-                      </CardTitle>
-                    )
+                    <CardTitle className="text-5xl">{skills?.length}</CardTitle>
                   ) : (
                     <LoadingButton
                       heightAndWidth={"h-7 w-7"}
@@ -194,7 +274,9 @@ function Dashboard() {
                                   {project.deployed}
                                 </TableCell>
                                 <TableCell>
-                                  <Button>Update</Button>
+                                  <Link to={`/update/project/${project._id}`}>
+                                    <Button>Update</Button>
+                                  </Link>
                                 </TableCell>
                                 <TableCell className="text-right">
                                   <Link
@@ -203,6 +285,7 @@ function Dashboard() {
                                         ? project.projectLink
                                         : ""
                                     }
+                                    target="Blank"
                                   >
                                     <Button>visit</Button>
                                   </Link>
@@ -246,6 +329,117 @@ function Dashboard() {
                         You have not added any project
                       </p>
                     )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+            <Tabs>
+              <TabsContent className="grid min-[1050px]:grid-cols-2 gap-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="px-7">
+                      Software Applications
+                    </CardTitle>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Name</TableHead>
+                            <TableHead className="md:table-cell">
+                              Icon
+                            </TableHead>
+                            <TableHead className="md:table-cell">
+                              Action
+                            </TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {application && application.length > 0 ? (
+                            application.map((app) => {
+                              return (
+                                <TableRow className="bg-accent">
+                                  <TableCell>{app.name}</TableCell>
+                                  <TableCell>
+                                    <img
+                                      className=" w-7 h-7"
+                                      src={app?.svg && app?.svg?.url}
+                                      alt={app.name}
+                                    ></img>
+                                  </TableCell>
+                                  <TableCell>
+                                    {deleteAppLoading &&
+                                    applicationId === app._id ? (
+                                      <LoadingButton
+                                        content={"Loading..."}
+                                        width={"w-1/2"}
+                                      ></LoadingButton>
+                                    ) : (
+                                      <Button
+                                        onClick={() =>
+                                          deleteApplicationHandler(app._id)
+                                        }
+                                      >
+                                        Delete
+                                      </Button>
+                                    )}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })
+                          ) : (
+                            <TableRow>
+                              <TableCell className="text-3xl overflow-y-hidden">
+                                You have not added any Software Application
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </CardHeader>
+                </Card>
+                <Card>
+                  <CardHeader className="px-7 flex items-center justify-between flex-row">
+                    <CardTitle>Timeline</CardTitle>
+                    <Link to={"/manage/timeline"}>
+                      <Button>Manage Timeline</Button>
+                    </Link>
+                  </CardHeader>
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Title</TableHead>
+                          <TableHead>From</TableHead>
+                          <TableHead>To</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {timelines && timelines.length > 0 ? (
+                          timelines.map((time) => {
+                            return (
+                              <TableRow className="bg-accent" key={time._id}>
+                                <TableCell className="font-medium">
+                                  {time.title}
+                                </TableCell>
+                                <TableCell className="md:table-cell">
+                                  {time.timeline.from}
+                                </TableCell>
+                                <TableCell className="md:table-cell text-right">
+                                  {time.timeline.to}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })
+                        ) : (
+                          <TableRow>
+                            <TableCell className="text-3xl overflow-y-hidden">
+                              You have not added any timeline
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
                   </CardContent>
                 </Card>
               </TabsContent>
