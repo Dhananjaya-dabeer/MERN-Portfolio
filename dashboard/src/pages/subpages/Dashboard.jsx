@@ -190,7 +190,10 @@ function Dashboard() {
                   </CardDescription>
                 </CardHeader>
                 <CardFooter>
-                  <Link to={user.data.portfolioURL && user.data.portfolioURL}>
+                  <Link
+                    to={user.data.portfolioURL && user.data.portfolioURL}
+                    target="_blank"
+                  >
                     <Button>Visit Portfolio</Button>
                   </Link>
                 </CardFooter>

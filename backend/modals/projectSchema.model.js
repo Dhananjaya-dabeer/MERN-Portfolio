@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const projectSchema = new mongoose.Schema({
   title: String,
   description: String,
-  getRepoLink: String,
+  gitRepoLink: String,
   projectLink: String,
   technologies: String,
   stack: String,

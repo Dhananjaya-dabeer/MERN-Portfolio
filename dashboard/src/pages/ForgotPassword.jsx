@@ -88,9 +88,9 @@ function ForgotPassword() {
           </div>
         </div>
       </div>
-      <div className="hidden bg-muted lg:block">
+      <div className="hidden bg-muted lg:block ">
         <img
-          src="/placeholder.svg"
+          src="https://i.ibb.co/rxRj8Qg/forgot-password-concept-illustration-114360-1095.jpg"
           alt="Image"
           className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />

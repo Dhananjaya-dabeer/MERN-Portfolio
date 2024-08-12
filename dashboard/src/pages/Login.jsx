@@ -16,6 +16,7 @@ import LoadingButton from "@/components/LoadingButton";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginImage, setLoginImage] = useState("");
   const { loading, isAuthenticated, error } = useSelector(
     (state) => state.user
   );
@@ -26,6 +27,7 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       dispatch(loginRequest());
+
       const { data } = await axios.post(
         `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/user/login`,
         { email, password },
@@ -34,7 +36,8 @@ export default function Login() {
           headers: { "Content-Type": "application/json" },
         }
       );
-      if (data.success === false) {
+      console.log(data);
+      if (data.success == false) {
         toast.error(data.message);
         dispatch(loginFailed(data.message));
       } else {
@@ -51,6 +54,19 @@ export default function Login() {
     if (isAuthenticated) {
       navigate("/");
     }
+    const loginImages = [
+      "https://i.ibb.co/BPT2YPQ/account-login-flat-illustration-203633-1807.jpg",
+      "https://i.ibb.co/nzMKt5y/digital-illustration-man-demonstrating-online-authentication-large-tablet-display-941526-2750.jpg",
+      "https://i.ibb.co/rcnZMTz/digital-illustration-man-demonstrating-online-authentication-large-tablet-display-941526-3257.jpg",
+      "https://i.ibb.co/j6qDj3s/login-concept-illustration-114360-739.jpg",
+      "https://i.ibb.co/j6qDj3s/login-concept-illustration-114360-739.jpg",
+      "https://i.ibb.co/j6qDj3s/login-concept-illustration-114360-739.jpg",
+      "https://i.ibb.co/260HCr0/flat-illustration-secure-login-system-concept-1272652-230.jpg",
+      "https://i.ibb.co/PtPpT4Z/3d-account-login-password-form-page-illustration-user-authorization-sign-account-authentication-page.jpg",
+      "https://i.ibb.co/cCNwjvs/forgot-password-concept-illustration-713576-107.jpg",
+      "https://i.ibb.co/2Pswr0n/illustration-welcome-message-mobile-wireframe-idea-with-showcasing-various-ui-elements-1278800-8029.jpg",
+    ][Math.floor(Math.random() * 10)];
+    setLoginImage(loginImages);
   }, []);
 
   return (
@@ -104,7 +120,7 @@ export default function Login() {
       </div>
       <div className="hidden bg-muted lg:block">
         <img
-          src="/placeholder.svg"
+          src={loginImage}
           alt="Image"
           className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
