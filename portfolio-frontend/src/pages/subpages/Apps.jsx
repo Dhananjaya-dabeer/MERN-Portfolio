@@ -18,7 +18,7 @@ function Apps() {
 
     getMyApps();
   }, []);
-
+  console.log(apps);
   return (
     <div className="w-full flex flex-col gap-8 sm:gap-12">
       <h1 className="text-tubeLight-effect text-[2rem] sm:text-[2.75rem] md:text-[3rem] lg:text-[3.8rem] tracking-[15px] dancing_text mx-auto w-fit">
@@ -36,7 +36,7 @@ function Apps() {
                 alt={app.title}
                 className="h-12 sm:h-24 w-auto"
               />
-              <p className="text-muted-foreground text-center">{app.title}</p>
+              <p className="text-muted-foreground text-center">{app.name}</p>
             </Card>
           ))}
       </div>
