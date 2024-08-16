@@ -45,7 +45,7 @@ function Portfolio() {
             projects.map((project) => (
               <Link to={`/project/${project._id}`} key={project._id}>
                 <img
-                  className="h-10"
+                  className="h-60 w-96"
                   src={project.projectBanner && project.projectBanner.url}
                   alt="Project Banner"
                 />
