@@ -55,7 +55,7 @@ function App() {
 
     return () => clearTimeout(timeOutId1);
   }, []);
-  return loading ? (
+  return !loading ? (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Router>
         <Routes>
