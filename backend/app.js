@@ -11,7 +11,7 @@ import timelineRouer from './router/timeline.router.js'
 import applicationRouter from './router/softwareApplication.router.js'
 import skillRouter from './router/skill.router.js'
 import projectRouter from './router/project.router.js'
-
+import testRouter from './router/test.router.js'
 const app = express()
 dotenv.config()
 
@@ -34,6 +34,7 @@ app.use(
 )
 
 dbConnection()
+app.use('/api/v1/test', testRouter)
 app.use('/api/v1/message', messageRouter)
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/timeline', timelineRouer)

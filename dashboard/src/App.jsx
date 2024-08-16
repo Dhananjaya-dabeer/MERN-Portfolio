@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
@@ -13,8 +13,55 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./components/ui/PrivateRoute";
 import "./App.css";
+import axios from "axios";
 function App() {
-  return (
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(0);
+  useEffect(() => {
+    const testingFunction = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/test/check`,
+          { withCredentials: true }
+        );
+
+        if (data.success == false) {
+          setLoading(false);
+          toast.warn(data.message);
+          return;
+        }
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        toast.warn(
+          error.response.data.message ||
+            error.message ||
+            "Please try to reload!"
+        );
+        console.log(error.message);
+      }
+    };
+    testingFunction();
+
+    const timeOutId1 = setTimeout(() => {
+      setMessage((prev) => prev + 1);
+
+      const timeOutId2 = setTimeout(() => {
+        setMessage((prev) => prev + 1);
+
+        const timeOutId3 = setTimeout(() => {
+          setMessage((prev) => prev + 1);
+        }, 10000);
+        return () => clearTimeout(timeOutId3);
+      }, 10000);
+
+      return () => clearTimeout(timeOutId2);
+    }, 10000);
+
+    return () => clearTimeout(timeOutId1);
+  }, []);
+  return !loading ? (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -31,6 +78,15 @@ function App() {
       </Routes>
       <ToastContainer position="bottom-right" theme="dark" />
     </BrowserRouter>
+  ) : (
+    <div className="w-screen h-screen flex flex-col justify-center items-center">
+      <img src={import.meta.env.VITE_LOADER} alt="" className="w-24 h-24" />
+      {message === 1 && <p>Syncing with the database, please hold on...</p>}
+      {message === 2 && (
+        <p>Hang tight! We're getting things ready for you...</p>
+      )}
+      {message === 3 && <p>Almost there! The data is being synchronized...</p>}
+    </div>
   );
 }
 
