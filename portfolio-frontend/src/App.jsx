@@ -5,7 +5,7 @@ import ProjectView from "./pages/ProjectView";
 import Footer from "./pages/Footer";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./app.css";
+import "./App.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 function App() {

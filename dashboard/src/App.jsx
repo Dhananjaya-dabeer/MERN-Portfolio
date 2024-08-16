@@ -9,7 +9,7 @@ import ManageTimeline from "./pages/ManageTimeline";
 import ManageProjects from "./pages/ManageProjects";
 import ViewProject from "./pages/ViewProject";
 import UpdateProject from "./pages/UpdateProject";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./components/ui/PrivateRoute";
 import "./App.css";
