@@ -107,7 +107,13 @@ function ViewProject() {
               </div>
               <div className="w-full sm:col-span-4">
                 <p className="text-2xl mb-2">Github Repository Link:</p>
-                {gitRepoLink}
+                <Link
+                  to={gitRepoLink ? gitRepoLink : "/"}
+                  target="_blank"
+                  className="text-sky-700"
+                >
+                  {gitRepoLink}
+                </Link>
               </div>
               <div className="w-full sm:col-span-4">
                 <p className="text-2xl mb-2">Project Link:</p>

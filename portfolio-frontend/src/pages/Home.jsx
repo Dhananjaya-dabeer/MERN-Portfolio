@@ -4,8 +4,8 @@ import Timeline from "./subpages/Timeline";
 import About from "./subpages/About";
 import Skills from "./subpages/Skills";
 import Portfolio from "./subpages/Portfolio";
-import Apps from "./subpages/Apps";
 import Contact from "./subpages/Contact";
+import Apps from "./subpages/Apps";
 
 function Home() {
   return (
