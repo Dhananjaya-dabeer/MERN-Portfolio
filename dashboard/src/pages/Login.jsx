@@ -40,10 +40,10 @@ export default function Login() {
       if (data.success == false) {
         toast.error(data.message);
         dispatch(loginFailed(data.message));
-      } else {
-        dispatch(loginSuccess(data));
-        navigate("/");
+        return;
       }
+      dispatch(loginSuccess(data));
+      navigate("/");
     } catch (error) {
       toast.error(error.response.data.message || error.message);
       dispatch(loginFailed("All fields are required!"));
