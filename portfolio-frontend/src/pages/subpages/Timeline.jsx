@@ -23,7 +23,7 @@ function Timeline() {
           Timeline
         </h1>
 
-        <ul className="relative border-s border-gray-200 dark:border-gray-700">
+        <ol className="relative border-s border-gray-200 dark:border-gray-700">
           {timeline &&
             timeline.map((item) => {
               return (
@@ -52,7 +52,7 @@ function Timeline() {
                 </li>
               );
             })}
-        </ul>
+        </ol>
       </div>
     </>
   );
