@@ -71,7 +71,7 @@ function AddApplication() {
           <div className="space-y-12">
             <div className="border-b border-gray-900/10 pb-12">
               <h2 className="font-semibold leading-7 text-gray-900 text-3xl text-center uppercase">
-                Add a an Application
+                Add an Application
               </h2>
               <div className="mt-10 flex flex-col gap-5">
                 <div className="w-full sm:col-span-4">
