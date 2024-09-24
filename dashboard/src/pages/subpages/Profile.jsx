@@ -13,7 +13,7 @@ function Profile() {
           <div className="grid w-[100%] gap-6">
             <div className="grid gap-2">
               <h1 className="text-3xl font-bold">Profile</h1>
-              <p className="mb-5">Full Profile Preview</p>
+              <p className="mb-5">Profile Preview</p>
             </div>
           </div>
           <div className="grid gap-6">
