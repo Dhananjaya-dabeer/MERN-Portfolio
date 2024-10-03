@@ -12,7 +12,7 @@ function Portfolio() {
         `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/project/getall`,
         { withCredentials: true }
       );
-      setProjects(data.data.reverse());
+      setProjects(data?.data?.reverse());
     };
 
     getMySkills();

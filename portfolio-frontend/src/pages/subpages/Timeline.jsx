@@ -10,7 +10,7 @@ function Timeline() {
         `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/timeline/getall`,
         { withCredentials: true }
       );
-      setTimeline(data.timelines.reverse());
+      setTimeline(data?.timelines?.reverse());
     };
 
     getMyTimeline();
