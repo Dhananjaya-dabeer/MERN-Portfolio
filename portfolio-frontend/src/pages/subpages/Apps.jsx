@@ -3,22 +3,23 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 function Apps() {
-  const [apps, setApps] = useState([]);
+  // const [apps, setApps] = useState([]);
 
-  useEffect(() => {
-    const getMyApps = async () => {
-      const { data } = await axios.get(
-        `${
-          import.meta.env.VITE_BACKEND_BASEURL
-        }/api/v1/softwareapplication/getall`,
-        { withCredentials: true }
-      );
-      setApps(data.data);
-    };
+  // useEffect(() => {
+  //   const getMyApps = async () => {
+  //     const { data } = await axios.get(
+  //       `${
+  //         import.meta.env.VITE_BACKEND_BASEURL
+  //       }/api/v1/softwareapplication/getall`,
+  //       { withCredentials: true }
+  //     );
+  //     console.log("Fetched Data", data);
+  //     setApps(data.data);
+  //   };
 
-    getMyApps();
-  }, []);
-  console.log(apps);
+  //   getMyApps();
+  // }, []);
+  // console.log(apps);
   return (
     <div className="w-full flex flex-col gap-8 sm:gap-12">
       {/* <h1 className="text-tubeLight-effect text-[2rem] sm:text-[2.75rem] md:text-[3rem] lg:text-[3.8rem] tracking-[15px] dancing_text mx-auto w-fit">

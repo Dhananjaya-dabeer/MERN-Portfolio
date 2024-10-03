@@ -12,7 +12,6 @@ function Timeline() {
       );
       setTimeline(data?.timelines?.reverse());
     };
-
     getMyTimeline();
   }, []);
 
