@@ -31,7 +31,7 @@ function Hero() {
       return `https://${url}`;
     }
   };
-  console.log(user);
+
   return (
     <div className="w-full">
       <div className="flex items-center gap-2 mb-2">
@@ -51,29 +51,29 @@ function Hero() {
         />
       </h1>
       <div className="w-fit px-5 py-2 bg-slate-50 rounded-[20px] flex gap-5 items-center mt-4 md:mt-8 lg:mt-10">
-        {user.instagramURL && (
-          <Link to={ensureUrl(user.instagramURL)} target="_blank">
+        {user?.instagramURL && (
+          <Link to={ensureUrl(user?.instagramURL)} target="_blank">
             <Instagram className="text-red-500 w-7 h-7" />
           </Link>
         )}
-        {user.facebookURL && (
-          <Link to={ensureUrl(user.facebookURL)} target="_blank">
+        {user?.facebookURL && (
+          <Link to={ensureUrl(user?.facebookURL)} target="_blank">
             <Facebook className="text-pink-800 w-7 h-7" />
           </Link>
         )}
-        {user.linkedinURL && (
-          <Link to={ensureUrl(user.linkedinURL)} target="_blank">
+        {user?.linkedinURL && (
+          <Link to={ensureUrl(user?.linkedinURL)} target="_blank">
             <Linkedin className="text-blue-800 w-7 h-7" />
           </Link>
         )}
-        {user.twitterURL && (
-          <Link to={ensureUrl(user.twitterURL)} target="_blank">
+        {user?.twitterURL && (
+          <Link to={ensureUrl(user?.twitterURL)} target="_blank">
             <Twitter className="text-blue-600 w-7 h-7" />
           </Link>
         )}
       </div>
       <div className="mt-4 md:mt-8 lg:mt-10 flex gap-3">
-        <Link to={user.githubURL} target="_blank">
+        <Link to={user?.githubURL} target="_blank">
           <Button className="rounded-[30px] flex items-center gap-2 flex-row">
             <span>
               <Github />
@@ -81,7 +81,7 @@ function Hero() {
             <span>Github</span>
           </Button>
         </Link>
-        <Link to={user.resume && user.resume.url} target="_blank">
+        <Link to={user?.resume && user?.resume.url} target="_blank">
           <Button className="rounded-[30px] flex items-center gap-2 flex-row">
             <span>
               <ExternalLink />
@@ -90,7 +90,7 @@ function Hero() {
           </Button>
         </Link>
       </div>
-      <p className="mt-8 text-xl tracking-[2px]">{user.aboutMe}</p>
+      <p className="mt-8 text-xl tracking-[2px]">{user?.aboutMe}</p>
       <hr className="my-8 md:my-10" />
     </div>
   );
