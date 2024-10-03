@@ -31,7 +31,7 @@ function Hero() {
       return `https://${url}`;
     }
   };
-
+  console.log(user);
   return (
     <div className="w-full">
       <div className="flex items-center gap-2 mb-2">
@@ -39,7 +39,7 @@ function Hero() {
         <p>Online</p>
       </div>
       <h1 className="overflow-x-hidden text-[1.3rem] sm:text-[1.7rem] md:text-[2.2rem] lg:text-[2.8rem] traacking=[2px] mb-4">
-        Hey, I'm {user.fullName}
+        Hey, I'm {user?.fullName}
       </h1>
       <h1 className="text-tubeLight-effect overflow-x-hidden text-[1.3rem] sm:text-[1.7rem] md:text-[2.2rem] lg:text-[2.8rem] tracking-[15px]">
         <Typewriter
