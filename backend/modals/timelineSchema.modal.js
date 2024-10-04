@@ -14,6 +14,7 @@ const timeLineSchema = new mongoose.Schema({
       type: String,
       required: [true, 'Timeline starting date is required!'],
     },
+    to: String,
   },
 })
 
