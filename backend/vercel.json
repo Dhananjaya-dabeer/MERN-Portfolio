@@ -1,0 +1,14 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "*.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "build": {
+      "env": {
+        "NPM_CONFIG_PRODUCTION": "false"
+      }
+    }
+  }
