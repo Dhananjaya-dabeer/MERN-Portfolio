@@ -237,6 +237,7 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   if (!user) {
     next(new ErrorHandler('User not found!', 404))
   }
+
   const resetToken = user.getResetPasswordToken()
   await user.save({ validateBeforeSave: false })
   const resetPasswordUrl = `${process.env.DASHBOARD_URL}/password/reset/${resetToken}`
@@ -257,7 +258,7 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
     user.resetPasswordToken = undefined
     user.resetPasswordExpire = undefined
     await user.save()
-    return next(new ErrorHandler(err.message, 500))
+    return next(new ErrorHandler(error.message, 500))
   }
 })
 
@@ -266,6 +267,7 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
   if (!token) {
     return next(new ErrorHandler('token not found!', 404))
   }
+
   if (req.body.password !== req.body.confirmPassword) {
     return next(
       new ErrorHandler('Password and confirm password does not match')

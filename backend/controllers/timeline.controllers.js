@@ -2,9 +2,10 @@ import { catchAsyncErrors } from '../middlewares/catchAsyncErrors.js'
 import ErrorHandler from '../middlewares/error.js'
 import { Timeline } from '../modals/timelineSchema.modal.js'
 export const postTimeline = catchAsyncErrors(async (req, res, next) => {
-  const { title, description, from, to } = req.body
+  const { title, organisation, description, from, to } = req.body
   const newTimeline = await Timeline.create({
     title,
+    organisation,
     description,
     timeline: { from, to },
   })

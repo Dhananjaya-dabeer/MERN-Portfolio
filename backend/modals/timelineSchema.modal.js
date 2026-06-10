@@ -5,6 +5,10 @@ const timeLineSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Title required!'],
   },
+  organisation: {
+    type: String,
+    required: [true, 'Organisation/Company name required'],
+  },
   description: {
     type: String,
     required: [true, 'Description required!'],
